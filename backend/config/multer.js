@@ -3,8 +3,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
 
-const _filename = fileURLToPath(import.meta.url);
-const _dirname = path.dirname(__filename);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const uploadDir = path.join(__dirname, '../uploads/documents');
 if(!fs.existsSync(uploadDir)){
