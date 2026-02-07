@@ -144,7 +144,56 @@ export const submitQuiz = async (req, res, next) => {
 //@access Private
 export const getQuizResults = async (req, res, next) => {
     try {
-        
+        const quiz = await Quiz.findOne({
+            _id: req.params.id,
+            userId: req.user._id
+        }).populate('documentId', 'title');
+
+        if(!quiz){
+            return res.status(400).json({
+                success: false,
+                error: 'Quiz not found',
+                statusCode: 400
+            });
+        }
+
+        if(!quiz.completedAt){
+            return res.status(400).json({
+                success: false,
+                error: 'Quiz not completed yet',
+                statusCode: 400
+            });
+        }
+
+        //Build detailed results
+        const detailedResults = quiz.questions.map((question, index) => {
+            const userAnswer = quiz.userAnswers.find(a => a.questionIndex === index);
+
+            return{
+                questionIndex: index,
+                question: question.question,
+                options: question.options,
+                correctAnswer: question.correctAnswer,
+                selectedAnswer: userAnswer?.selectedAnswer || null,
+                isCorrect: userAnswer?.isCorrect || false,
+                explanation: question.explanation
+            };
+        });
+
+        res.status(200).json({
+            success: true,
+            data:{
+                quiz:{
+                    id: quiz._id,
+                    title: quiz.title,
+                    document: quiz.documentId,
+                    score: quiz.score,
+                    totalQuestions: quiz.totalQuestions,
+                    completedAt: quiz.completedAt
+                },
+                results: detailedResults
+            }
+        });
     } catch (error) {
         next(error);
     }
@@ -155,7 +204,25 @@ export const getQuizResults = async (req, res, next) => {
 //@access Private
 export const deleteQuiz = async (req, res, next) => {
     try {
-        
+        const quiz = await Quiz.findOne({
+            _id:req.params.id,
+            userId: req.user._id
+        });
+
+        if(!quiz){
+            return res.status(404).json({
+                success: false,
+                error: 'Quiz not found',
+                statusCode: 400
+            });
+        }
+
+        await quiz.deleteOne();
+
+        res.status(200).json({
+                success: true,
+                message: 'Quiz deleted successfully'
+            });
     } catch (error) {
         next(error);
     }
