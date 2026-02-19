@@ -7,7 +7,8 @@ import Flashcard from '../models/Flashcard.js';
 // @access Private
 export const getDashboard = async (req, res, next) => {
     try {
-        const userId = req.users._id;
+        const userId = req.user._id;
+        
 
         //Get counts
         const totalDocuments = await Document.countDocuments({userId});
