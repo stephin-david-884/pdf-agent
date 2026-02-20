@@ -40,7 +40,7 @@ export const uploadDocument = async (req, res, next) => {
         const document = await Document.create({
             userId: req.user._id,
             title,
-            fileName: req.file.orginalname,
+            fileName: req.file.originalname,
             filePath: fileUrl,
             fileSize: req.file.size,
             status: 'processing'
