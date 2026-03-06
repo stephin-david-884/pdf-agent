@@ -4,6 +4,8 @@ import documentService from '../../services/documentService';
 import Spinner from '../../components/common/Spinner';
 import toast from 'react-hot-toast';
 import { ArrowLeft, ExternalLink } from 'lucide-react';
+import PageHeader from '../../components/common/PageHeader';
+import Tabs from '../../components/common/Tabs';
 
 
 const DocumentDetailPage = () => {
@@ -54,23 +56,23 @@ const DocumentDetailPage = () => {
     const pdfUrl = getPdfUrl();
 
     return (
-      <div className=''>
-        <div className=''>
-          <span className=''>Document Viewer</span>
+      <div className='bg-white border border-gray-300 rounded-lg overflow-hidden shadow-sm'>
+        <div className='flex items-center justify-between p-4 bg-gray-50 border-b border-gray-300'>
+          <span className='text-sm font-medium text-gray-700'>Document Viewer</span>
           <a 
-            href=""
+            href={pdfUrl}
             target='_blank'
             rel='noopener noreferrer'
-            className=''  
+            className='inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors'  
           >
             <ExternalLink size={16}/>
             Open in new tab
           </a>
         </div>
-        <div className=''>
+        <div className='bg-gray-100 p-1'>
           <iframe
             src={pdfUrl}
-            className=''
+            className='w-full h-[70vh] bg-white rounded border border-gray-300'
             title='PDF Viewer'
             frameBorder="0"
             style={{
@@ -83,12 +85,48 @@ const DocumentDetailPage = () => {
 
   };
 
-  
+  const renderChat = () => {
+    return "renderChat"
+  };
 
+  const renderAIActions = () => {
+    return "renderAIActions"
+  };
+
+  const renderFlashcardsTab = () => {
+    return "renderFlashcardsTab"
+  };
+
+  const renderQuizzesTab = () => {
+    return "renderQuizzesTab"
+  };
+
+  const tabs = [
+    { name: 'Content', label: 'Content', content: renderContent() },
+    { name: 'Chat', label: 'Chat', content: renderChat() },
+    { name: 'AI Actions', label: 'AI Actions', content: renderAIActions() },
+    { name: 'Flashcards', label: 'Flashcards', content: renderFlashcardsTab() },
+    { name: 'Quizzes', label: 'Quizzes', content: renderQuizzesTab() },
+  ];
+
+  if(loading){
+    return <Spinner />
+  }
+
+  if(!document){
+    return <div className='text-center p-8'>Document not found </div>
+  }
 
   return (
     <div>
-      
+      <div className='mb-4'>
+        <Link to="/documents" className='inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 transition-colors'>
+          <ArrowLeft size={16} />
+          Back to Documents
+        </Link>
+      </div>
+      <PageHeader title={document.data.title} />
+      <Tabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
     </div>
   )
 }
