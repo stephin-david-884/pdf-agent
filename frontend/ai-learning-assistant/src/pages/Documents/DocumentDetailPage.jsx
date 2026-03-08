@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import documentService from '../../services/documentService';
 import Spinner from '../../components/common/Spinner';
@@ -11,7 +11,7 @@ import ChatInterface from '../../components/chat/ChatInterface';
 
 const DocumentDetailPage = () => {
 
-  const {id} = useParams();
+  const { id } = useParams();
   const [document, setDocument] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('Content');
@@ -23,21 +23,21 @@ const DocumentDetailPage = () => {
         setDocument(data);
       } catch (error) {
         toast.error('Failed to fetch document details');
-      } finally{
+      } finally {
         setLoading(false);
       }
     };
 
     fetchDocumentDetails();
-  },[id]);
+  }, [id]);
 
   // Helper function to get the full PDF URL
   const getPdfUrl = () => {
-    if(!document?.data?.filePath) return null;
+    if (!document?.data?.filePath) return null;
 
     const filePath = document.data.filePath;
 
-    if(filePath.startsWith('http://') || filePath.startsWith('https://')){
+    if (filePath.startsWith('http://') || filePath.startsWith('https://')) {
       return filePath;
     }
 
@@ -46,11 +46,11 @@ const DocumentDetailPage = () => {
   };
 
   const renderContent = () => {
-    if(loading) {
+    if (loading) {
       return <Spinner />
     }
 
-    if(!document || !document.data || !document.data.filePath){
+    if (!document || !document.data || !document.data.filePath) {
       return <div className=''>PDF not available</div>
     }
 
@@ -60,13 +60,13 @@ const DocumentDetailPage = () => {
       <div className='bg-white border border-gray-300 rounded-lg overflow-hidden shadow-sm'>
         <div className='flex items-center justify-between p-4 bg-gray-50 border-b border-gray-300'>
           <span className='text-sm font-medium text-gray-700'>Document Viewer</span>
-          <a 
+          <a
             href={pdfUrl}
             target='_blank'
             rel='noopener noreferrer'
-            className='inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors'  
+            className='inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors'
           >
-            <ExternalLink size={16}/>
+            <ExternalLink size={16} />
             Open in new tab
           </a>
         </div>
@@ -110,11 +110,11 @@ const DocumentDetailPage = () => {
     { name: 'Quizzes', label: 'Quizzes', content: renderQuizzesTab() },
   ];
 
-  if(loading){
+  if (loading) {
     return <Spinner />
   }
 
-  if(!document){
+  if (!document) {
     return <div className='text-center p-8'>Document not found </div>
   }
 
