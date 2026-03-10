@@ -116,7 +116,7 @@ export const chunkText = (text, chunkSize=500, overlap = 50) => {
  */
 
 export const findRelevantChunks = (chunks, query, maxChunks = 3) => {
-    if(!chunks || chunks.length === 0 || query ) {
+    if(!chunks || chunks.length === 0 || !query ) {
         return []
     }
 
